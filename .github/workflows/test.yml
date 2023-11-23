@@ -28,7 +28,7 @@ jobs:
     - name: Run prod
       id: tag_prod
       if: startsWith(github.ref, 'refs/tags') == true
-      uses: ./
+      run: .github/workflows/main.js
     - name: Test prod
       if: startsWith(github.ref, 'refs/tags') == true
       run: |
