@@ -8,28 +8,40 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+    # Run the action and set the GITHUB_REF variable to test the action
+    # with different github.ref values.
     - name: Run dev
       id: tag_dev
       run: |
         GITHUB_REF= node main.js && false || true
-        GITHUB_REF=origin/refs/tag/v1 node main.js && false || true
-        GITHUB_REF=refs/tag/v1 node main.js && false || true
+        GITHUB_REF=origin/refs/tags/v1 node main.js && false || true
+        GITHUB_REF=refs/tags/v1 node main.js && false || true
         GITHUB_REF=refs/heads/master node main.js && false || true
         GITHUB_REF=refs/tags/v1.0.0 node main.js
+    # Test that the output tag value is correct.
     - name: Test dev
       run: |
+        echo "tag from dev: ${tag_dev.outputs.tag}"
         test "v1.0.0" = "${{steps.tag_dev.outputs.tag}}"
+    # Run the action with the INPUT_NUMBERS_ONLY input set.
     - name: Run dev with numbers only
       id: tag_dev_numbers_only
       run: GITHUB_REF=refs/tags/v1.0.0 INPUT_NUMBERS_ONLY=true node main.js
+    # Test that the output tag value is correct.
     - name: Test dev with numbers only
       run: |
+        echo "tag from dev: ${tag_dev_numbers_only.outputs.tag}"
         test "1.0.0" = "${{steps.tag_dev_numbers_only.outputs.tag}}"
+    # Run the action with the default input.
     - name: Run prod
       id: tag_prod
+      # Only run the action if the github.ref starts with "refs/tags".
       if: startsWith(github.ref, 'refs/tags') == true
       uses: ./
+    # Test that the output tag value is not empty.
     - name: Test prod
+      # Only run this step if the github.ref starts with "refs/tags".
       if: startsWith(github.ref, 'refs/tags') == true
       run: |
+        echo "tag from prod: ${tag_prod.outputs.tag}"
         test -n "${{steps.tag_prod.outputs.tag}}"
