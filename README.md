@@ -24,7 +24,7 @@ Next, add the action itself to your workflow:
 ```yaml
     - name: Get latest tag pushed
       id: tag
-      uses: 32teeth/action-get-tag@v1
+      uses: 32teeth/action-github-tag@v1
       with:
         # Return only the tag number (e.g., v1.0.0 -> 1.0.0)
         numbers_only: true
