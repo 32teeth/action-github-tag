@@ -1,16 +1,16 @@
-name: Get tag
-description: Get tag name from GITHUB_REF environment variable
+name: Get latest tag pushed
+description: Get latest tag pushed from GITHUB_REF environment variable
 branding:
   icon: tag
   color: gray-dark
 inputs:
-  strip_v:
+  numbers_only:
     required: false
     default: false
-    description: Whether to strip "v" from the tag or not
+    description: Return only the tag number (ex: v1.0.0 -> 1.0.0)
 outputs:
   tag:
-    description: Git tag name
+    description: GitHub tag name
 runs:
-  using: node12
+  using: node18
   main: main.js

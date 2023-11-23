@@ -10,16 +10,18 @@ Should be used only when actual tag is pushed, otherwise the Action will exit wi
 on:
   push:
     tags:
+      - 'v*.*.*'
+      - '*.*.*'
       - '*'
 ```
 
 ```yaml
-- name: Get tag
+- name: Get latest tag pushed
   id: tag
-  uses: dawidd6/action-get-tag@v1
+  uses: 32teeth/action-get-tag@v1
   with:
-    # Optionally strip `v` prefix
-    strip_v: true
-- name: Use tag
+    # Return only the tag number (ex: v1.0.0 -> 1.0.0)
+    numbers_only: true
+- name: Use latest tag pushed
   run: echo ${{steps.tag.outputs.tag}}
 ```
