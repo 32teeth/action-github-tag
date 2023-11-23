@@ -19,10 +19,10 @@ jobs:
     - name: Test dev
       run: |
         test "v1.0.0" = "${{steps.tag_dev.outputs.tag}}"
-    - name: Run dev with strip v
+    - name: Run dev with numbers only
       id: tag_dev_numbers_only
       run: GITHUB_REF=refs/tags/v1.0.0 INPUT_NUMBERS_ONLY=true node main.js
-    - name: Test dev with strip v
+    - name: Test dev with numbers only
       run: |
         test "1.0.0" = "${{steps.tag_dev_numbers_only.outputs.tag}}"
     - name: Run prod
