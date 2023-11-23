@@ -7,7 +7,7 @@ inputs:
   numbers_only:
     required: false
     default: false
-    description: Return only the tag number (ex: v1.0.0 -> 1.0.0)
+    description: Return only the tag number (v1.0.0 -> 1.0.0)
 outputs:
   tag:
     description: GitHub tag name
