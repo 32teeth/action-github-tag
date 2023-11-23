@@ -4,32 +4,39 @@ on: push
 
 jobs:
   test:
+    name: Check tag
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    - name: Run dev
-      id: tag_dev
-      run: |
-        GITHUB_REF= node main.js && false || true
-        GITHUB_REF=origin/refs/tag/v1 node main.js && false || true
-        GITHUB_REF=refs/tag/v1 node main.js && false || true
-        GITHUB_REF=refs/heads/master node main.js && false || true
-        GITHUB_REF=refs/tags/v1.0.0 node main.js
-    - name: Test dev
-      run: |
-        test "v1.0.0" = "${{steps.tag_dev.outputs.tag}}"
-    - name: Run dev with numbers only
-      id: tag_dev_numbers_only
-      run: GITHUB_REF=refs/tags/v1.0.0 INPUT_NUMBERS_ONLY=true node main.js
-    - name: Test dev with numbers only
-      run: |
-        test "1.0.0" = "${{steps.tag_dev_numbers_only.outputs.tag}}"
-    - name: Run prod
-      id: tag_prod
-      if: startsWith(github.ref, 'refs/tags') == true
-      uses: ./
-    - name: Test prod
-      if: startsWith(github.ref, 'refs/tags') == true
-      run: |
-        test -n "${{steps.tag_prod.outputs.tag}}"
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run dev
+        id: tag_dev
+        run: |
+          GITHUB_REF= node main.js && false || true
+          GITHUB_REF=origin/refs/tag/v1 node main.js && false || true
+          GITHUB_REF=refs/tag/v1 node main.js && false || true
+          GITHUB_REF=refs/heads/master node main.js && false || true
+          GITHUB_REF=refs/tags/v1.0.0 node main.js
+
+      - name: Test dev
+        run: |
+          test "v1.0.0" = "${{steps.tag_dev.outputs.tag}}"
+
+      - name: Run dev with numbers only
+        id: tag_dev_numbers_only
+        run: GITHUB_REF=refs/tags/v1.0.0 INPUT_NUMBERS_ONLY=true node main.js
+
+      - name: Test dev with numbers only
+        run: |
+          test "1.0.0" = "${{steps.tag_dev_numbers_only.outputs.tag}}"
+
+      - name: Run prod
+        id: tag_prod
+        if: startsWith(github.ref, 'refs/tags') == true
+        uses: ./
+
+      - name: Test prod
+        if: startsWith(github.ref, 'refs/tags') == true
+        run: |
+          test -n "${{steps.tag_prod.outputs.tag}}"
