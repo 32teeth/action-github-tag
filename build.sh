@@ -33,5 +33,5 @@ git commit -am "Update to version: $version"
 git tag $version -m "Update to version: $version"
 git push origin $version
 git push
-gh release create $version --generate-notes'
+gh release create $version --generate-notes
 
